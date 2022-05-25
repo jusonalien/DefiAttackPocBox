@@ -20,6 +20,16 @@ async function main() {
   // await greeter.deployed();
 
   // console.log("Greeter deployed to:", greeter.address);
+
+  await network.provider.request({
+    method: "hardhat_reset",
+    params: [{
+      forking: {
+        jsonRpcUrl: "https://bsc-mainnet.nodereal.io/v1/1005333b090f46aa9edb747e3fa5235a",
+        blockNumber: 18073756
+      }
+    }]
+  })
   
   
   const [attacker] = await ethers.getSigners();

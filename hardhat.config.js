@@ -18,18 +18,4 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
  module.exports = {
   solidity: "0.8.4",
-  networks: {
-    // hardhat: {
-    //   forking: {
-    //     url: "https://bsc-mainnet.nodereal.io/v1/1005333b090f46aa9edb747e3fa5235a",
-    //     blockNumber: 17832800
-    //   }
-    // },
-    hardhat: {
-      forking: {
-        url: "https://bsc-mainnet.nodereal.io/v1/1005333b090f46aa9edb747e3fa5235a",
-        blockNumber: 18073756
-      }
-    }
-  }
 };
